@@ -52,10 +52,31 @@ sap.ui.define([], function() {
     views: new sap.m.SinglePlanningCalendarDayView({})
   });
 
+  const model = new sap.ui.model.json.JSONModel(persona.ulf);
+
+  const menu = new sap.m.Menu({
+    items: [
+      new sap.m.MenuItem({
+        text: "Demo",
+        items: [
+          new sap.m.MenuItem({ text: "Joe", press: function() { model.setProperty("/", persona.joe) } }),
+          new sap.m.MenuItem({ text: "Ulf", press: function() { model.setProperty("/", persona.ulf) } }),
+        ]
+      })
+    ]
+  });
+
   const shell = new sap.m.Shell({
     app: new sap.m.App({
       pages: new sap.m.Page({
-        title: "betaplace",
+        customHeader: new sap.m.OverflowToolbar({
+          content: [
+            new sap.m.ToolbarSpacer(),
+            new sap.m.Title({ text: "betaplace" }),
+            new sap.m.ToolbarSpacer(),
+            new sap.m.Button({ icon: "sap-icon://menu2", press: function(event) { menu.openBy(event.getSource()); } }),
+          ]
+        }),
         content: new sap.m.IconTabBar({
           items: [
             new sap.m.IconTabFilter({ icon: "sap-icon://activities", text: "Agenda", key: "agenda", content: agenda }),
@@ -67,6 +88,6 @@ sap.ui.define([], function() {
     })
   }).placeAt("content");
 
-  shell.setModel(new sap.ui.model.json.JSONModel(persona.ulf));
+  shell.setModel(model);
 
 });
